@@ -1,0 +1,107 @@
+{
+  "Biryani": [
+    "Basmati rice",
+    "Chicken[opt]",
+    "Yogurt",
+    "Onions",
+    "Tomatoes",
+    "Ginger",
+    "Garlic",
+    "Garam masala",
+    "Cardamom",
+    "Cinnamon",
+    "Cloves",
+    "Bay leaves",
+    "Mint",
+    "Coriander",
+    "Saffron",
+    "Ghee",
+    "Salt"
+  ],
+
+  "Butter_Chicken": [
+    "Chicken",
+    "Butter",
+    "Cream",
+    "Tomatoes",
+    "Onion",
+    "Ginger",
+    "Garlic",
+    "Garam masala",
+    "Cumin",
+    "Coriander",
+    "Kasuri methi",
+    "Chili powder",
+    "Salt"
+  ],
+
+  "Fried_Chicken": [
+    "Chicken",
+    "Flour",
+    "Eggs",
+    "Butter milk",
+    "Salt",
+    "Pepper",
+    "Paprika",
+    "Garlic powder",
+    "Onion powder",
+    "Oil"
+  ],
+
+  "Jalebi": [
+    "All-purpose flour",
+    "Ghee",
+    "Saffron",
+    "Cardamom",
+    "Baking soda",
+    "Sugar",
+    "Water"
+  ],
+
+  "Noodles_Pasta": [
+    "bell peppers",
+    "Carrots",
+    "Chicken[opt]",
+    "Soy sauce",
+    "Garlic",
+    "Ginger",
+    "Olive oil",
+    "Salt",
+    "Pepper"
+  ],
+
+  "Rasgulla": [
+    "Milk",
+    "Lemon juice",
+    "vinegar",
+    "Sugar",
+    "Water",
+    "Rose water",
+    "cardamom",
+    "Sweets",
+    "Sugar",
+    "Ghee",
+    "Cardamom",
+    "Nuts",
+    "Almonds",
+    "Cashews",
+    "Saffron"
+  ],
+
+  "Sweets": [
+    "Milk",
+    "vinegar",
+    "Sugar",
+    "Water",
+    "cardamom",
+    "Sugar",
+    "Ghee",
+    "Cardamom",
+    "Nuts",
+    "Almonds",
+    "Cashews",
+    "Saffron"
+  ],
+
+  "Tea": ["Tea leaves", "Tea bags", "Water", "Milk", "Sugar"]
+}

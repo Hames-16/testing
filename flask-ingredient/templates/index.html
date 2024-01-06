@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Play</title>
+    <style>
+      body {
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+      }
+
+      h1,
+      .fancy_text {
+        background: rgb(238, 174, 202);
+        background: radial-gradient(
+          circle,
+          rgba(238, 174, 202, 1) 0%,
+          rgba(148, 187, 233, 1) 100%
+        );
+        font-size: 45px;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .fancy_text {
+        font-size: 30px;
+      }
+
+      .safe {
+        background: rgb(36, 232, 22);
+        background: radial-gradient(
+          circle,
+          rgb(5, 173, 81) 0%,
+          rgb(21, 244, 18) 100%
+        );
+        font-size: 45px;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        width: 250px;
+        margin: 0;
+      }
+
+      pre {
+        font-size: 2em;
+        font-weight: bolder;
+      }
+
+      #srcImage {
+        min-width: 250px;
+        min-height: 250px;
+      }
+
+      div input[type="file"] {
+        background: rgb(238, 174, 202);
+        background: radial-gradient(
+          circle,
+          rgba(238, 174, 202, 1) 0%,
+          rgba(148, 187, 233, 1) 100%
+        );
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 400px;
+      }
+
+      div input[type="file"]::before {
+        content: "Choose a Food Image 📷, ";
+        font-size: 1.6em;
+        font-weight: bolder;
+      }
+
+      img {
+        border-radius: 10px;
+      }
+
+      div input[type="file"]::file-selector-button {
+        display: none;
+      }
+
+      #symptom-group {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-columns: 10%;
+        grid-auto-rows: minmax(50px, auto);
+        gap: 5px;
+      }
+
+      #status {
+        color: rgb(34, 202, 34);
+      }
+
+      #risky {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+        padding: 0;
+      }
+
+      #ingredients {
+        margin: 20px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+      }
+
+      #ing-div,
+      #nut-div,
+      #ingredients {
+        overflow: hidden;
+      }
+
+      .ingredient {
+        padding: 10px;
+        background: rgb(2, 0, 36);
+        background: linear-gradient(
+          90deg,
+          rgba(2, 0, 36, 1) 0%,
+          rgba(121, 9, 54, 1) 35%,
+          rgba(0, 212, 255, 1) 100%
+        );
+        border-radius: 5px;
+        color: #fff;
+        transition: 200ms ease;
+        cursor: default;
+      }
+
+      .ingredient:hover,
+      .nutritional:hover,
+      .risky_food:hover {
+        transform: scaleY(1.2);
+      }
+
+      #nutritional_info {
+        margin: 20px;
+      }
+
+      .nutritional {
+        padding: 10px;
+        border-radius: 5px;
+        color: rgb(68, 77, 68);
+        border: 1px solid rgb(68, 77, 68);
+        transition: 200ms ease;
+        cursor: default;
+      }
+
+      #rdiv {
+        border-radius: 5px;
+        border: 1px solid #ff9b9b;
+        color: #fa3030;
+        overflow: hidden;
+        padding: 0;
+      }
+
+      .risky_food {
+        padding: 10px;
+        background: rgb(238, 174, 202);
+        background: rgb(63, 94, 251);
+        background: rgb(131, 58, 180);
+        background: linear-gradient(
+          90deg,
+          rgba(131, 58, 180, 1) 0%,
+          rgba(253, 29, 29, 1) 50%,
+          rgba(252, 176, 69, 1) 100%
+        );
+        border-radius: 5px;
+        color: #fff;
+        transition: 200ms ease;
+        cursor: default;
+      }
+
+      #symptom-group label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #eee;
+        padding: 5px 10px;
+        border-radius: 5px;
+        height: 30px;
+      }
+
+      #symptom-group label input {
+        width: 20px;
+        height: 20px;
+        margin-left: 5px;
+        accent-color: deeppink;
+      }
+
+      h2 {
+        background: rgb(238, 174, 202);
+        background: radial-gradient(
+          circle,
+          rgba(238, 174, 202, 1) 0%,
+          rgba(148, 187, 233, 1) 100%
+        );
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        user-select: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      #split {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: start;
+        gap: 20px;
+        margin-top: 20px;
+        overflow: hidden;
+      }
+
+      #split pre {
+        margin: 0;
+        padding: 0 0 10px 0;
+        position: relative;
+        left: -10px;
+      }
+
+      .container {
+        overflow: hidden;
+      }
+
+      .hide {
+        display: none;
+      }
+
+      @keyframes anim {
+        from {
+          max-height: 70px;
+        }
+
+        to {
+          max-height: 700px;
+        }
+      }
+
+      @keyframes anim2 {
+        from {
+          max-height: 0px;
+        }
+
+        to {
+          max-height: 700px;
+        }
+      }
+
+      @keyframes anim3 {
+        from {
+          max-height: 0px;
+          padding: 0;
+        }
+
+        to {
+          max-height: 700px;
+          padding: 10px;
+        }
+      }
+
+      .shrink_hide {
+        animation: 500ms anim2 ease-in reverse forwards;
+      }
+
+      .expand_show {
+        animation: 500ms anim2 ease-in forwards;
+      }
+
+      .expand_rdiv {
+        animation: 1s anim3 ease-in forwards;
+      }
+
+      .shrink {
+        animation: 500ms anim ease-in reverse forwards;
+      }
+
+      .expand {
+        animation: 500ms anim ease-out forwards;
+      }
+    </style>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+      integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+      crossorigin="anonymous"
+    ></script>
+    <script type="text/javascript" charset="utf-8">
+      var socket = io();
+      var iStatus = "Processing...";
+
+      socket.on("progress", (data) => {
+        if (data.length !== 0) {
+          document.querySelector("#status").innerText = `Status: ${data}`;
+          iStatus = data;
+        } else {
+          document.querySelector("#status").innerText = `Status: ${iStatus}`;
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <h1>Image Recognition / Health Analysis</h1>
+    <div class="container expand">
+      <h2 name="p1">
+        Choose User Medical Symptoms
+        <span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="16"
+            width="10"
+            viewBox="0 0 320 512"
+          >
+            <!--!Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+            <path
+              d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+            />
+          </svg>
+        </span>
+      </h2>
+      <div id="symptom-group" class="show"></div>
+    </div>
+    <div>
+      <input type="file" id="file" />
+      <div id="split" class="shrink_hide">
+        <div id="srcImage"></div>
+        <div id="info">
+          <pre id="status"> Status: Processing... </pre>
+          <pre id="detected"> Detected: Processing... </pre>
+          <pre id="risk_factor"> Risk Factor: Processing... </pre>
+          <div id="rdiv" class="shrink_hide">
+            <pre id="rig"> Risky ingredients </pre>
+            <div id="risky">
+              <h3 class="fancy_text">Loading...</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="ing-div" class="shrink">
+        <h2 name="p2">
+          Ingredients
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="16"
+              width="10"
+              viewBox="0 0 320 512"
+            >
+              <!--!Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+              <path
+                d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+              />
+            </svg>
+          </span>
+        </h2>
+        <div id="ingredients"></div>
+      </div>
+      <div id="nut-div" class="shrink">
+        <h2 name="p3">
+          Nutritional Information
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="16"
+              width="10"
+              viewBox="0 0 320 512"
+            >
+              <!--!Font Awesome Free 6.5.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.-->
+              <path
+                d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
+              />
+            </svg>
+          </span>
+        </h2>
+        <div id="nutritional_info"></div>
+      </div>
+    </div>
+  </body>
+  <script>
+    // Populating the symptom group ...
+    const symGroup = document.querySelector("#symptom-group");
+    const container = document.querySelector(".container");
+    container.addEventListener("click", (e) => {
+      if (e.target.getAttribute("name") == "p1") {
+        if (container.classList.contains("shrink")) {
+          container.classList.remove("shrink");
+          setTimeout(() => {
+            container.classList.add("expand");
+          }, 1);
+        } else {
+          container.classList.remove("expand");
+          setTimeout(() => {
+            container.classList.add("shrink");
+          }, 1);
+        }
+      }
+    });
+
+    columns = [
+      "Digestive discomfort",
+      "Dairy Allergies",
+      "Allergies",
+      "Nut allergies",
+      "Gas",
+      "Bloating",
+      "Blood sugar",
+      "Dental issues",
+      "Foodborne illnesses",
+      "cholesterol",
+      "Lactose intolerance",
+      "Gluten sensitivity/intolerance",
+      "Weight gain",
+      "Heart issues",
+    ];
+
+    columns.forEach((e) => {
+      const label = document.createElement("label");
+      label.innerText = e;
+      const state = localStorage.getItem(e, false);
+      const cb = document.createElement("input");
+      cb.setAttribute("type", "checkbox");
+      if (state !== null && state === "true") cb.setAttribute("checked", "");
+      cb.setAttribute("name", e);
+      label.appendChild(cb);
+      symGroup.appendChild(label);
+    });
+
+    const img = document.querySelector("#srcImage");
+    const file = document.querySelector("#file");
+    const out = document.querySelector("#out");
+    const riskyFoods = document.querySelector("#risky");
+    const ingredients = document.querySelector("#ingredients");
+    const nutritional_info = document.querySelector("#nutritional_info");
+    const split = document.querySelector("#split");
+    const ing_div = document.querySelector("#ing-div");
+    const nut_div = document.querySelector("#nut-div");
+    const status = document.querySelector("#status");
+    const detected = document.querySelector("#detected");
+    const riskFactor = document.querySelector("#risk_factor");
+    const rDiv = document.querySelector("#rdiv");
+    const rIg = document.querySelector("#rig");
+
+    // Animate collapse and expand stuff...
+    ing_div.addEventListener("click", (e) => {
+      if (e.target.getAttribute("name") == "p2") {
+        if (ing_div.classList.contains("shrink")) {
+          ing_div.classList.remove("shrink");
+          setTimeout(() => {
+            ing_div.classList.add("expand");
+          }, 1);
+        } else {
+          ing_div.classList.remove("expand");
+          setTimeout(() => {
+            ing_div.classList.add("shrink");
+          }, 1);
+        }
+      }
+    });
+
+    nut_div.addEventListener("click", (e) => {
+      if (e.target.getAttribute("name") == "p3") {
+        if (nut_div.classList.contains("shrink")) {
+          nut_div.classList.remove("shrink");
+          setTimeout(() => {
+            nut_div.classList.add("expand");
+          }, 1);
+        } else {
+          nut_div.classList.remove("expand");
+          setTimeout(() => {
+            nut_div.classList.add("shrink");
+          }, 1);
+        }
+      }
+    });
+    // End, Animate collapse and expand stuff...
+
+    file.addEventListener("change", () => {
+      const im = document.createElement("img");
+      const src = URL.createObjectURL(file.files[0]);
+      im.setAttribute("src", src);
+      im.setAttribute("width", "250px");
+      im.setAttribute("height", "250px");
+      img.innerHTML = "";
+      img.appendChild(im);
+
+      //
+      riskyFoods.innerHTML = `
+      <div id="risky">
+        <h3 class="fancy_text">Loading...</h3>
+      </div>
+    `.trim();
+
+      detected.innerText = "Detected: Processing...";
+      riskFactor.innerText = "Factor: Processing...";
+      rDiv.classList.remove("expand_rdiv");
+      rIg.setAttribute("style", "display: block");
+
+      const symptom_data = {};
+      for (let child of symGroup.children) {
+        let cbx = child.querySelector("input");
+        const symptom = cbx.getAttribute("name");
+        symptom_data[symptom] = cbx.checked + 0;
+        localStorage.setItem(symptom, cbx.checked);
+      }
+
+      container.classList.remove("expand");
+      split.classList.remove("shrink_hide");
+      setTimeout(() => {
+        container.classList.add("shrink");
+        split.classList.remove("expand_show");
+      }, 10);
+
+      const formData = new FormData();
+      formData.append("image", file.files[0]);
+      formData.append("symptom_sample", JSON.stringify(symptom_data));
+
+      fetch("/predict", {
+        method: "POST",
+        body: formData,
+      })
+        .then((resp) => resp.json())
+        .then((data) => {
+          detected.innerText = `Detected: "${data.data.predcicted_food_item}"`;
+          riskFactor.innerText = `Risk Factor: ${data.data.risk_factor_percents}%`;
+
+          rDiv.classList.add("expand_rdiv");
+          // riskyFoods.setAttribute("style", "padding: 10px");
+
+          riskyFoods.innerHTML = "";
+          if (data.data.risky_ingredients.length < 1) {
+            riskyFoods.innerHTML = `
+              <div id="risky">
+                <h3 class="fancy_text safe"> Safe to eat </h3>
+              </div>
+            `.trim();
+            rIg.setAttribute("style", "display: none");
+          }
+
+          data.data.risky_ingredients.forEach((food) => {
+            const foodLabel = document.createElement("p");
+            foodLabel.innerText = food;
+            foodLabel.setAttribute("class", "risky_food");
+            riskyFoods.appendChild(foodLabel);
+          });
+
+          ingredients.innerHTML = "";
+          data.data.ingredients.forEach((ing) => {
+            const ingLabel = document.createElement("p");
+            ingLabel.innerText = ing;
+            ingLabel.setAttribute("class", "ingredient");
+            ingredients.appendChild(ingLabel);
+          });
+
+          nutritional_info.innerHTML = "";
+          data.data.nutritional_information.forEach((info) => {
+            const enc = JSON.stringify(info.ingredient_nutrition);
+            if (enc !== "[]") {
+              const nutLabel = document.createElement("p");
+              nutLabel.innerText = enc;
+              nutLabel.setAttribute("class", "nutritional");
+              nutritional_info.appendChild(nutLabel);
+            }
+          });
+        });
+    });
+  </script>
+</html>
